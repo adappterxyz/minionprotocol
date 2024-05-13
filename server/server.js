@@ -427,12 +427,8 @@ app.get('/deploy', async (req, res) => {
 
 app.get('/close', async (req, res) => {
   try {
-    // Your API logic here
-    //deploy
-    //closedeploy
-    //generate commands using akash chat
-    //upload
-    //middleware comms
+    const { wallet, client, certificate, sdl } = await loadPrerequisites();
+    closeDeployment(wallet, client, deploymentid);
     res.send('API endpoint');
   } catch (error) {
     console.error('Error in /close:', error);
@@ -441,6 +437,7 @@ app.get('/close', async (req, res) => {
 });
 
 app.get('/generate', async (req, res) => {
+  //sen  
   res.send('API endpoint');
 });
 
