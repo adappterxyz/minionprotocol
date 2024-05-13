@@ -76,6 +76,9 @@ code {
   align-items:center;
   justify-content: center;
 }
+.loading-container img{
+  width:80px;
+}
 .loading-container.complete *{
   display:none;
 }

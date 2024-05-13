@@ -189,7 +189,18 @@ function App() {
   }
 const handleDeploy=async ()=>{
  // const akash = await import("../server/dep.js");
-}
+ setIsLoading(true);
+ setTimeout(() => {
+
+  
+    setIsLoading(false);
+   
+ 
+}, 20000);
+};
+
+ 
+
   useEffect(() => {
    
 
@@ -208,6 +219,7 @@ const handleDeploy=async ()=>{
           {isLoading &&
             <div class="load-bg">
               <div className={`loading-container ${loadComplete ? '' : 'complete'}`}>
+                <img src="/banana-dance.gif" style={{"width":"50px;"}} />
                 <div class="loading-circle"></div>
                 <div class="loading-circle"></div>
                 <div class="loading-circle"></div>
