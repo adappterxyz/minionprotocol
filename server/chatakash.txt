@@ -1,0 +1,20 @@
+fetch("https://chat.akash.network/api/chat", {
+  "headers": {
+    "accept": "*/*",
+    "accept-language": "en-SG,en;q=0.9,zh-SG;q=0.8,zh;q=0.7,en-GB;q=0.6,en-US;q=0.5,zh-CN;q=0.4",
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "pragma": "no-cache",
+    "sec-ch-ua": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "cookie": "_ga=GA1.1.2012306216.1707103372; __cuid=aaabf33005e94eff9280762345b38bc4; amp_fef1e8=2fd20ddd-de1b-4149-bb31-636fa189f7d9R...1ho98of1v.1ho98of21.3.0.3; _ga_0N02GW68VP=GS1.1.1715530439.35.0.1715530439.0.0.0; _ga_GL5HS9J1PR=GS1.1.1715530439.8.0.1715530439.0.0.0; _ga_LFRGN2J2RV=GS1.1.1715530439.8.0.1715530439.0.0.0",
+    "Referer": "https://chat.akash.network/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": "{\"model\":{\"id\":\"mistral\",\"name\":\"Mistral-7B\",\"maxLength\":12000,\"tokenLimit\":4000},\"messages\":[{\"role\":\"user\",\"content\":\"can you generate image?\"},{\"role\":\"assistant\",\"content\":\" I'm an AI language model and don't have the ability to generate images. However, I can help you find or describe images based on your queries or provide you with image links. Let me know if you have a specific image in mind and I'll do my best to assist you. For instance, you can ask for an image of a specific object, animal, or scene, and I can search the web for relevant images and provide you with the results. Also, I can describe images in detail based on given information or image prompts. Let me know how I can help you with images!\"},{\"role\":\"user\",\"content\":\"test\"},{\"role\":\"assistant\",\"content\":\" I'm sorry for any confusion, but I need more context to provide a meaningful response. When you say \\\"test,\\\" I assume you mean you want me to test my ability to generate or describe images. I'm an AI language model and don't have the ability to generate images, but I can certainly help describe images or provide you with relevant image links based on your queries.\\n\\nFor example, if you ask me to describe an image of a red rose, I can do that. Or, if you ask me to find an image of a cat sitting in front of a fireplace, I can search the web for that and provide you with the links. Let me know if you have a specific request in mind, and I'm happy to help!\\n\\nHere's a description of an image of a red rose: A vibrant red rose sits against a white background, its petals spreading outward in perfect symmetry. The rose's stem is a deep green color, with small, bright-green leaves at the base. The rose's center is a deep red, with soft, velvety petals that seem to shimmer in the light. The image evokes feelings of romance and beauty.\"},{\"role\":\"user\",\"content\":\"hey\"}],\"key\":\"\",\"prompt\":\"You are a helpful and friendly assistant. Follow the user's instructions carefully. Don't use emojis or slang. Provide accurate and helpful information.\"}",
+  "method": "POST"
+});

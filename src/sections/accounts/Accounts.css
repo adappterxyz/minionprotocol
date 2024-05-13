@@ -1,0 +1,10 @@
+.account-component {
+  animation: slide-in 0.3s ease;
+}
+tr:nth-child(even) {
+  background-color: #F9FAFB;
+}
+
+tr:hover {
+  background-color: #E2EDFF;
+}

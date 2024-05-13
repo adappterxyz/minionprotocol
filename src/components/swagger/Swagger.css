@@ -1,0 +1,81 @@
+.swagger-container {
+  margin: 20px; 
+  
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+
+
+.section-header h3 {
+  margin: 0;
+  flex-grow: 1;
+  font-size: 20px;
+}
+
+.section-content {
+  padding: 10px;
+}
+
+.api-section {
+  margin-bottom: 10px;
+}
+
+.api-summary {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+
+
+.api-summary h4 {
+  margin: 0;
+  flex-grow: 1;
+  font-size: 18px;
+}
+
+
+.toggle-icon {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.hidden .api-doc {
+  display: block;
+}
+
+.api-doc {
+  display: none;
+  margin-top: 10px;
+}
+
+.api-request h5,
+.api-response h5 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.api-request ul,
+.api-response ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.api-request ul li,
+.api-response ul li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}

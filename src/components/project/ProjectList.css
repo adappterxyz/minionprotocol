@@ -1,0 +1,57 @@
+.projectlist .project {
+  align-items: center;
+  height: 200px;
+  width: 85%;
+  margin: 20px auto;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  border-radius: 8px; /* Increased for a softer look */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* subtle shadow for depth */
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project .api {
+  text-align: center;
+  width:100%;
+  display: block;
+  opacity: 0;
+  transform: translateY(10px); /* start slightly lower */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.project:hover {
+  background-color: #ffffff; /* pure white for hover */
+  transform: translateY(-3px); /* slight raise effect on hover */
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4); /* enhanced shadow on hover for a "lifted" effect */
+}
+
+.proceed {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.link-icon {
+  opacity: 0; /* Icon is fully transparent initially */
+  transition: opacity 0.2s ease-in-out; /* Smooth transition for opacity */
+}
+.proceed:hover{
+  text-decoration: underline;
+}
+.proceed:hover .link-icon {
+  opacity: 1; /* Icon becomes fully visible on hover */
+}
+
+.project:hover .api {
+
+  display: block;
+  opacity: 1;
+  transform: translateY(0px); /* end at normal position */
+}
+.project:hover .api  span{
+ text-align: center;
+}

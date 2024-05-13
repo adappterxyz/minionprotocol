@@ -1,0 +1,37 @@
+---
+version: "2.0"
+services:
+  playw1:
+    image: adappterxyz/rpabot:latest
+    expose:
+      - port: 9323
+        as: 80
+        to:
+          - global: true
+    env:
+      - NODE_ENV=production
+      - DIR=./tests
+      - SOURCE=Home
+      - FILE=fillform.spec.ts
+      - MNEMONIC=puppy surge exhaust lift remind theme syrup where asthma stable skate tissue
+profiles:
+  compute:
+    playw1:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 2Gi
+        storage:
+          - size: 2Gi
+  placement:
+    dcloud:
+      pricing:
+        playw1:
+          denom: uakt
+          amount: 10000
+deployment:
+  playw1:
+    dcloud:
+      profile: playw1
+      count: 1

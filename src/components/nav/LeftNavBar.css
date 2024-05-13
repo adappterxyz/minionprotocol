@@ -1,0 +1,112 @@
+.left-nav-bar {
+  width: 95px; min-height:100vh; height:100%;
+  background: linear-gradient(#523801 40%, #f7c41e 60%);
+  background-size: 400% 200%;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index:10;
+  transition: transform 0.3s ease;
+  z-index:36;
+  animation: gradientAnimation 3s linear infinite;
+  overflow:hidden;
+}
+.bar{
+  position:absolute; right:0; width:2px; height:100%; background:#666; z-index:2; top:0;
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 20%;
+}
+50% {
+    background-position: 400% 40%;
+}
+100% {
+    background-position: 0% 20%;
+}
+}
+.left-nav-bar.hidden {
+  transform: translateX(-100%);
+}
+
+.nav-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin-bottom: 1px;
+  cursor: pointer;
+  padding: 15px 10px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  
+  opacity:0.9;
+}
+.nav-item *{
+  color: #FFF; 
+  transition: color 0.5s;
+}
+.nav-item.active *{
+  color: #333; 
+  transition: color 0.5s;
+}
+.nav-item:hover {
+  background-color: var(--primary-color);
+  color: #fff; 
+ 
+}
+.nav-item:hover *{
+  
+}
+.nav-item.active{ position:relative;
+background:#FFF;  box-shadow: none; border: 1px solid; border-right:none; z-index:3;
+opacity:1;
+}
+
+  .placeholder-text {
+   
+    transform-origin: bottom left;
+    position: absolute;
+    border:none;
+    bottom: 60px;
+    left: 0px; /* Adjust the left value as needed */
+    z-index:40;
+    width: 200px; /* Adjust the width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: #FFF;
+    transform: translateX(100px)  rotate(-90deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .placeholder-text.visible {
+    transform: translateX(80px) rotate(-90deg);
+  
+  }
+  
+  .placeholder-text.hidden {
+    display: none;
+  }
+.toggle-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 6px 15px;
+  border: none;
+  border-radius: 2px;
+  background-color: #999;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 9999;
+}
+
+.toggle-button:hover {
+  background-color: #f7c41e;
+}

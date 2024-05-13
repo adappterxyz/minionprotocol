@@ -1,0 +1,104 @@
+.wizard-container {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* This will push the navigation to the bottom */
+  /* Full height */
+  max-width: calc(100% - 15px);
+  width:500px;
+  margin: 15px auto;
+  padding:15px;
+}
+
+.step-container {
+
+  height:500px;
+  padding:0 15px;
+
+  overflow-y:auto;
+}
+.wizard-container h6{
+ margin-bottom:10%;
+}
+h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.card {
+  flex: 0 0 150px;
+  padding: 10px;
+  margin:6px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow:0;
+  background-color: #f7f7f7;
+  transition: padding 0.3s, margin 0.3s;
+}
+
+.card:hover {
+  background-color: #e0e0e0;
+  box-shadow:0 0 3px #999; 
+  padding:16px; margin: 0px;
+}
+
+.card:hover svg, .selected svg, .selected img, .card:hover img{
+  animation: sway 5s infinite linear;
+}
+.wizard .selected{
+
+    background-color: #999;
+    color: #fff;
+  }
+
+@keyframes sway {
+  from {
+    transform: rotate3d(0, 1, 0, 0);
+  }
+  to {
+    transform: rotate3d(0, 1, 0, 360deg);
+  }
+}
+
+.wizbuttons{
+  
+}
+.previous-button,
+.next-button,
+.finish-button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 2px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.previous-button {
+  background-color: #ccc;
+}
+
+.next-button,
+finish-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.previous-button:hover,
+.next-button:hover,
+finish-button:hover {
+  background-color: #0056b3;
+}
+
+/* Apply animation to step container */
+.step-container {
+  animation: slide-in 0.3s ease;
+}
