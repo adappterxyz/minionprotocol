@@ -416,15 +416,28 @@ app.get('/deploy', async (req, res) => {
     const deployment = await createDeployment(sdl, wallet, client);
     console.log("Creating lease...");
     const lease = await createLease(deployment, wallet, client);
-    console.log("Sending manifest...");
-    const ret = await sendManifest(sdl, lease, wallet, certificate);
-    res.send('Deployed: ' + ret);
+   
+    res.json(lease);
   } catch (error) {
     console.error('Error in /deploy:', error);
     res.status(500).send('Deployment failed: ' + error.message);
   }
 });
-
+app.get('/deploymanifest', async (req, res) => {
+  try {
+    const id = req.params.lease;
+    const lease = {};
+    lease.id = JSON.parse(id);
+    console.log(lease);
+    const { wallet, client, certificate, sdl } = await loadPrerequisites();
+ 
+    const ret = await sendManifest(sdl, lease, wallet, certificate);
+    res.send('Deployed: ' + ret);
+  } catch (error) {
+    console.error('Error in /deploy-manifest:', error);
+    res.status(500).send('Deployment failed: ' + error.message);
+  }
+});
 app.get('/close', async (req, res) => {
   try {
     const { wallet, client, certificate, sdl } = await loadPrerequisites();
