@@ -260,18 +260,19 @@ cursor: pointer;
   justify-content: space-between; /* Distributes space between items */
   width: 100%; /* Takes full width of the parent container */
   padding: 10px; /* Optional padding for some spacing */
-  height: 80vh;
+  height: 60vh;
 }
 
 .option {
   height:100%;
+  max-width:300px;
   flex: 1; /* Gives the option panel some flexibility in taking up space */
   padding: 10px; /* Padding for spacing inside the panel */
   background-color: #f0f0f0; /* Light grey background for visibility */
   margin-right: 10px; /* Space between option panel and chat container */
 }
 
-.chat-container {
+.option-container, .code-container {
   height:100%;
   flex: 3; /* Allows the chat container to take more space */
   display: flex;
@@ -281,11 +282,53 @@ cursor: pointer;
   border: 1px solid #ccc; /* Border around the chat container */
   margin-right: 10px; /* Space between chat container and code editor */
 }
+.outer-container {
+  width: 30px; /* Define as needed */
+  height: 200px; /* Define as needed */
+  position: relative; /* Parent positioning context */
+  overflow: hidden; /* Ensures no content spills out */
+  display: flex; /* Centering child */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+.rotated-div:hover { opacity: 0.5; cursor: pointer;}
+.rotated-div {
+  width: 200px; /* Adjust based on content */
+  height: 30px; /* Adjust based on content */
+  background-color: rgb(233, 3, 3); /* For visibility */
+  box-shadow: 0 -2px 5px #000 inset;
+  text-align: center; /* Align text inside the rotated div */
+  color:#FFF;
+  line-height: 30px; /* Align text vertically */
+  transform: rotate(-90deg); /* Rotation angle */
+  position: absolute; /* Absolute positioning inside relative container */
+}
+.chat-container{
+  height:100%;  flex: 3; /* Allows the chat container to take more space */
+  display: flex;
+  flex-direction: column; /* Stacks the internal chat elements vertically */
+  padding: 10px;
+  background-color: #fff; /* White background for the chat area */
+  border: 1px solid #ccc; /* Border around the chat container */
+  margin-right: 10px; /* Space between chat container and code editor */
+}
+.chatbox{
+  height:100%;
+  flex: 3; /* Allows the chat container to take more space */
+  display: flex;
+  flex-direction: column; /* Stacks the internal chat elements vertically */
+  padding: 10px;
+  background-color: #fff; /* White background for the chat area */
+  border: 1px solid #ccc; /* Border around the chat container */
+  margin-right: 10px; /* Space between chat container and code editor */
+}
+.option-panel button{ width:100%; }
 
 .code-container {
   height:100%;
   flex: 2; /* Gives the code editor flexibility in taking up space */
   padding: 10px;
+  overflow:auto;
   background-color: #e8e8e8; /* Slightly different background for distinction */
 }
 
@@ -294,6 +337,8 @@ cursor: pointer;
   padding: 10px;
   margin-top: 10px; /* Space from the middle row */
   background-color: #f9f9f9; /* Light background for the flowchart container */
+  font-weight:100;
+  font-family: "Poetsen One", sans-serif;
 }
 
 .messages {
@@ -317,6 +362,19 @@ cursor: pointer;
 .message-text {
   margin-top: 5px;
 }
+.message-text, pre{ font-family:'Montserrat', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen','Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue' !important;
+ }
+.message-text.user {
+  margin-top: 5px;
+  color:blue;
+  text-align:right;
+}
+
+.message-text.assistant {
+  margin-top: 5px;
+  text-align:left;
+}
+.message-text pre{ background: #ccc; padding:4px; }
 
 .send-message-form {
   display: flex;
@@ -343,6 +401,35 @@ cursor: pointer;
 
 .send-button:hover {
   background-color: #0056b3;
+}
+
+.flowchart-container {
+  display: flex;
+/*  flex-wrap: wrap; */
+  overflow-x: scroll;
+  gap: 10px;
+  background-color: #f4f4f4; /* Light grey background */
+}
+
+.step-block {
+  flex: 1 1 200px; /* Each block takes up equal space, minimum 200px */
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Soft shadow for 3D effect */
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.step-block.start {
+  border-left: 4px solid green; /* Green border for Start steps */
+}
+
+.step-block.process {
+  border-left: 4px solid blue; /* Blue border for Process steps */
+}
+
+.step-block.end {
+  border-left: 4px solid red; /* Red border for End steps */
 }
 
 @keyframes App-logo-spin {

@@ -204,7 +204,7 @@ const LEditor = () => {
         onBlur={handleCodeSnippetChange}
         onKeyUp={handleKeyUp}
         padding={15}
-        style={{ flexGrow: 1,    "font-size": "12px" }}
+        style={{ flexGrow: 1,    "font-size": "12px", "min-height": "400px" }}
       />
     </div>
   );

@@ -47,7 +47,7 @@ body {
   font-family: 'Montserrat', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen','Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue' !important;
   font-Family: ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace;
 }
-table{ min-width:600px; }
+table{ min-width:400px; }
 body {
   margin: 0;
   font-family: -apple-system, 

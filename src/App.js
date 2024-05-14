@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/login/Login';
@@ -10,6 +10,8 @@ import theme from './theme.jsx'; // The theme you created
 import initialProjectsdata from './init/project.json';
 import Leditor from "./components/leditor/LEditor";
 import { Container, Paper, Typography, TextField, Button, Grid, Box , Card, CardContent} from '@mui/material';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const { ethers } = require('ethers');
 
@@ -20,7 +22,6 @@ function App() {
   const [activeItem, setActiveItem] = useState('Bots');
   const [curract, setCurract] = useState('...');
   const [initialProjects, setInitialProjects] = useState(initialProjectsdata);
-  const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadComplete, setLoadComplete] = useState(true);
   const [panelIsVisible, setPanelIsVisible] = useState(true);
@@ -29,23 +30,132 @@ function App() {
   const [balance, setBalance] = useState(0);
 
 
+const example = `import { test, expect } from '@playwright/test';
+console.log(process.env.DIR);
+test('has title', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
 
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Playwright/);
+});
+
+test('get started link', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+
+  // Click the get started link.
+  await page.getByRole('link', { name: 'Get started' }).click();
+
+  // Expects the URL to contain intro.
+  await expect(page).toHaveURL(/.*intro/);
+});
+`;
+const [showChat, toggleShowChat] = useState(true);
       const [messages, setMessages] = useState([]); // Store messages
       const [newMessage, setNewMessage] = useState(''); // Input for new message
+      const messagesEndRef = useRef(null);
+  //https://imigresen-online.imi.gov.my/mdac/main?registerMain
+  async function Gemini(prompt){
+    fetch(
+      "https://proxy.kwang-5a2.workers.dev",
+      {
+        body: JSON.stringify(prompt),
+        headers: {
+          apiKey: "AIzaSyAWsblnruBZuSzN__qUqh8oK02qgVfj_ew",
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+      }
+    )
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      // Process your data here
+    })
+    .catch(error => {
+      console.error('There was a problem with your fetch operation:', error);
+    });
+  }
+  const AkashRequest = async(bodyObject) =>{
+    const url ='https://akashchat.kwang-5a2.workers.dev/'
+//        const url = "https://chat.akash.network/api/chat";
+    const headers = {
+    };
+    
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(bodyObject)  // Ensure the body is stringified
+      });
   
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }else{
+  return await response.text();
+}
+     
+  }
+  const genmsg =(msg) =>{
+    return msg.map(message => ({
+      role: message.role,
+      content: message.text
+  }));
+  }
       // Function to handle sending a message
-      const sendMessage = (event) => {
+      const sendMessage = async(event) => {
           event.preventDefault(); // Prevent form from submitting traditionally
           if (newMessage.trim() !== '') {
               const message = {
                   id: messages.length + 1, // Simple incrementing ID
                   text: newMessage,
+                  role: "user",
                   timestamp: new Date().toLocaleTimeString() // Store the time when the message was sent
               };
-              setMessages([...messages, message]); // Add new message to messages array
-              setNewMessage(''); // Clear input after sending
+
+
+              setMessages([...messages, message, {
+                id: messages.length + 1, // Simple incrementing ID
+                text: "Please wait...",
+                role: "",
+                timestamp: '' // Store the time when the message was sent
+            }]); // Add new message to messages array
+              setNewMessage('');
+              scrollToBottom();
+              console.log(messages);
+              // Example body object
+              const bodyObject = {
+                model: {
+                  id: "mistral",
+                  name: "Mistral-7B",
+                  maxLength: 12000,
+                  tokenLimit: 4000
+                },
+                messages: genmsg([...messages, message]),
+                key: "",
+                prompt: "You are an RPA engineer specialized in nodejs playwright library. A typical output should look like "+example
+              };
+              
+              // Using the generic fetch function
+//              Gemini(bodyObject)
+              const response = await AkashRequest(bodyObject);
+              setMessages([...messages, message, {
+                id: messages.length + 1, // Simple incrementing ID
+                text: response,
+                role: "assistant",
+                timestamp: new Date().toLocaleTimeString() // Store the time when the message was sent
+            }]);
+            
+            scrollToBottom();
+               console.log(response);
+              // Clear input after sending
           }
         }
+
+        
   var kvp = []; 
 if(typeof localStorage['kvp'] !=='undefined'){  kvp = JSON.parse(localStorage['kvp']) }
   const [keyValuePairs, setKeyValuePairs] = useState(kvp); // Stores all key-value pairs
@@ -69,7 +179,39 @@ if(typeof localStorage['kvp'] !=='undefined'){  kvp = JSON.parse(localStorage['k
     }
 };
 
+const [currentStep, setCurrentStep] = useState(null);
+const [steps,setSteps] = useState([
+  { id: 1, title: "Login", description: "Log into the application.", type: "Start" },
+  { id: 2, title: "Fetch Data", description: "Retrieve data from the database.", type: "Process" },
+  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
+  { id: 4, title: "Logout", description: "Log out from the application.", type: "End" },
+  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
+  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
+  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
+  { id: 4, title: "Logout", description: "Log out from the application.", type: "End" },
+]);
 
+const addStep = () => {
+  const newId = steps.length + 1; // Simple ID generation
+  const newStep = {
+      id: newId,
+      title: `New Step ${newId}`,
+      description: "Description of new step.",
+      type: "Process"
+  };
+  setSteps([...steps, newStep]);
+};
+
+const deleteCurrentStep = () => {
+  if (currentStep) {
+      setSteps(steps.filter(step => step.id !== currentStep.id));
+  }
+};
+
+
+const [jobs,setJobs] = useState([   { id: 1, status: "Starting up...", description: "crawl data from ...", link: "Process" },
+{ id: 2,status: "Job in progress", description: "submit application", type: "End" },
+{ id: 2,status: "Job completed", description: "escrow account information", type: "End" }]);
 
   const apiUrl = '//localhost:3000';
 
@@ -85,42 +227,15 @@ if(typeof localStorage['kvp'] !=='undefined'){  kvp = JSON.parse(localStorage['k
     setCurract("Logging out...");
     console.log('1logout');
     // Perform the logout using fetch
-    fetch(`${apiUrl}/session/logout`, {
-      method: 'GET', // Specify the request method
-      headers: {
-        'Content-Type': 'application/json', // Specify JSON content type
-        'Authorization': `Bearer ${localStorage.getItem('login')}` // Use localStorage.getItem for safer access
-      }
-    })
-      .then(response => {
-
-        if (!response.ok) {
-          // If the response is not ok, you might want to handle this differently
-          throw new Error('Network response was not ok');
-        }
-        // Logout was successful
         if (localStorage.getItem('login')) {
           localStorage.removeItem('login'); // Correctly use localStorage.removeItem
         }
         setIsLoading(false);
         setCurract("...");
-      })
-      .catch(error => {
-
-        console.log('elogout');
-        // Handle any errors during logout
-        console.error('Error:', error);
-        // Optionally, set loading to false and update status even in case of error
-        setIsLoading(false);
-        setCurract("...");
-      });
   };
 
   
 
-  const deploy = async () => {
-
-  }
   const handleLogin = (auth, status) => {
     // Begin loading process
     setIsLoading(true);
@@ -177,8 +292,35 @@ if(typeof localStorage['kvp'] !=='undefined'){  kvp = JSON.parse(localStorage['k
 
     updateMessage();
   }
-const handleDeploy=async ()=>{
- // const akash = await import("../server/dep.js");
+  const handleUpdateOrAddJob = (jobs, newJob) => {
+    // Check if the job already exists in the array
+    const jobIndex = jobs.findIndex(job => job.id === newJob.id);
+
+    let updatedJobs;
+    if (jobIndex !== -1) {
+        // Job exists, update it
+        updatedJobs = jobs.map((job, index) => 
+            index === jobIndex ? { ...job, ...newJob } : job
+        );
+    } else {
+        // Job doesn't exist, add it
+        updatedJobs = [...jobs, newJob];
+    }
+
+    return updatedJobs;
+};  
+const handleDeploy=async (bot)=>{
+ //
+ console.log(bot);
+ bot.id=123;
+ const newjob = {id: 10,status: "Job in progress", description: "submit application", type: "End" };
+ const updatedJobs = handleUpdateOrAddJob(jobs, newjob);
+ setJobs(updatedJobs);
+ 
+ console.log(updatedJobs);
+
+
+
  setIsLoading(true);
  setCurract("Generating deployment message");
  fetch(`${apiUrl}/deploy`, {
@@ -224,7 +366,8 @@ const getBalance = async(address) =>{
   setBalance(parseFloat(ethers.formatUnits(balance, 18)).toFixed(2));
 }
 
-const handleCloseDeploy=async()=>{
+const handleCloseDeploy=async(id)=>{
+  console.log(id); return false;
   setIsLoading(true);
   setCurract("Closing Deployment...");
  fetch(`${apiUrl}/close`, {
@@ -244,17 +387,23 @@ console.log(error)
 
 }
  
+const scrollToBottom = () => {
+  const messagesContainer = document.querySelector('.messages');
+  if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+};
+
 
   useEffect(() => {
-   
-
+    scrollToBottom();
     return () => {
       if (intervalId) {
         console.log("Cleanup interval: " + intervalId);
         clearInterval(intervalId);
       }
     };
-  }, [intervalId]);
+  }, [intervalId, messages]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -344,18 +493,24 @@ console.log(error)
               {activeItem === 'Develop' && <div>
            
               <div className="middle-row">
-              <div className="option">Option Panel</div>
-  <div className="chat-container">
-            <div className="messages">
-                {messages.map((msg) => (
-                    <div key={msg.id} className="message">
-                        <div className="message-info">
-                            <span>{msg.timestamp}</span>
-                        </div>
-                        <div className="message-text">{msg.text}</div>
-                    </div>
-                ))}
+              <div class="outer-container">
+    <div class="rotated-div" onClick={()=>toggleShowChat(!showChat)} ><sup>Powered by Akash Chat</sup></div>
+    </div>
+    {showChat ? ( <div className="chat-container">
+   
+        <div className="messages">
+          {messages.map((msg) => (
+            <div key={msg.id} className="message">
+              <div className="message-info">
+                <span>{msg.timestamp}</span>
+              </div>
+              <div className={`message-text ${msg.role}`}>
+                <ReactMarkdown children={msg.text} remarkPlugins={[remarkGfm]} />
+              </div>
             </div>
+          ))}
+        </div>
+    
             <form onSubmit={sendMessage} className="send-message-form">
                 <input
                     type="text"
@@ -366,15 +521,42 @@ console.log(error)
                 />
                 <button type="submit" className="send-button">Send</button>
             </form>
+        </div>  ) : null}
+        <div className="option">  <div className="option-panel">
+            <button onClick={addStep}>Add Step</button>
+            <button onClick={deleteCurrentStep}>Delete Current Step</button>
+            {/* Button to set current step for demonstration */}
+            {currentStep && <div>{currentStep.title}</div>}
+            <button onClick={() => setCurrentStep({ id: currentStep.id, title: "Updated:)", description: "Data is being processed.", type: "Process" })}>
+                Update current step
+                
+            </button>
+            <div>Current step options will be dynamically updated based on the selected step.</div>
+            <button style={{"background":"#333"}}onClick={() => setCurrentStep({ id: 2, title: "Process Data", description: "Data is being processed.", type: "Process" })}>
+                <sup>Deploy to Marketplace via Jackal Storage</sup>
+            </button>
+          
         </div>
-
+              </div>
  
     
     <div className="code-container">
       <Leditor/>
     </div>
   </div>
-  <div className='flowchart-container'>Flowchart</div>
+  <div className='flowchart-container'>
+  <div >
+            <div className="flowchart-container">
+            {steps.map(step => (
+                <div key={step.id} className={`step-block ${step.type.toLowerCase()}`}   onClick={() => setCurrentStep(step)}>
+                    <h4>{step.title}</h4>
+                    <p>{step.description}</p>
+                </div>
+            ))}
+        </div>
+        </div>
+
+  </div>
 
               </div>}
 
@@ -382,7 +564,7 @@ console.log(error)
 
 
             </div>
-            <RightPanel handleCloseDeploy={handleCloseDeploy} panelIsVisible={panelIsVisible} setPanelIsVisible={setPanelIsVisible} handleLogout={handleLogout} />
+            <RightPanel jobs={jobs} setJobs={setJobs} handleCloseDeploy={handleCloseDeploy} panelIsVisible={panelIsVisible} setPanelIsVisible={setPanelIsVisible} handleLogout={handleLogout} />
           </div>
           ) : ("")
           }

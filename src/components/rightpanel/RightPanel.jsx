@@ -4,7 +4,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import './RightPanel.css';
 
-const RightPanel = ({ handleCloseDeploy, panelIsVisible, setPanelIsVisible, functionOptions, handleLogout, templateData, talknojutsu }) => {
+const RightPanel = ({ jobs, updateJobs,handleCloseDeploy, panelIsVisible, setPanelIsVisible, functionOptions, handleLogout, templateData, talknojutsu }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -31,10 +31,17 @@ const RightPanel = ({ handleCloseDeploy, panelIsVisible, setPanelIsVisible, func
           },
         }}
       >
-        <div className='main'>
-          ACTIVE 
-          -- a bunch of jobs here ---
-          <button onClick={handleCloseDeploy}>Close Deployment</button>
+
+          <div className='main'>
+            {jobs.map((job) => (
+                <div key={job.id} className="job">
+                    <div className="status">{job.status}</div>
+                    <div className="description">{job.description}</div>
+                    {job.link && <div className="link">{job.link}</div>}  // Optional link display
+                    <button onClick={()=>handleCloseDeploy(job.id)}>Close Deployment</button>
+                </div>
+            ))}
+          
         </div>
         <Button
           variant="contained"
