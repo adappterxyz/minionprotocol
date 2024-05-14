@@ -61,7 +61,7 @@ const [showChat, toggleShowChat] = useState(true);
       {
         body: JSON.stringify(prompt),
         headers: {
-       
+        
           "Content-Type": "application/json"
         },
         method: "POST",
