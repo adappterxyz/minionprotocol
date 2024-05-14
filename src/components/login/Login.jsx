@@ -51,7 +51,6 @@ import './Login.css';
         <Typography component="h1" variant="h3" style={{
     "font-family": "Poetsen One",
     "color": "#FFF",
-    "background":"#f7c41e",
     "text-shadow":"0 0 3px #000"
   }}>
        MinionProtocol
@@ -103,6 +102,9 @@ import './Login.css';
   
     </Container>
       </div>
+    <div style={{ position: 'relative', 'z-index': '10',textAlign: 'center', color: '#000', "font-family": "Poetsen One" }}>
+      <sup>Powered by</sup> <br/>
+      <img src="/powered.png"/> </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ max-width:600px;
   font-family: "Poetsen One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  
+  font-family: "Poetsen One";
     position: relative;
  
     overflow: visible;
@@ -20,9 +20,33 @@ max-width:600px;
 .backdrop{
   height:100vh; width:100vw; background:#f7c41e; top:0; position:absolute;
 }
+.loginbox label{ background:none; } 
+.loginbox input{ background:#FFF;} 
 .loginbox{ 
+ 
   background-color:#f7c41e !important;
 }
+
+
+.loginbox::before {
+  content: "";
+  position: absolute;
+  inset:0;
+  border-radius: 50%;
+  transform-origin: inherit;
+}
+
+
+.loginbox:hover,
+.loginbox:hover::before{
+  transform:rotate(0.25deg);
+  transition:.2s  cubic-bezier(0.5,120,0.5,-120); 
+}
+.loginbox:hover::before {
+   transition-delay:.2s; 
+}
+
+
 .videobg{
   position:absolute; top:0; left:0;
   width: 100%; 

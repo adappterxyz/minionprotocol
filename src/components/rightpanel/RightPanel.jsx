@@ -2,10 +2,9 @@ import React from 'react';
 import { Drawer, Button, Tab, useTheme, useMediaQuery } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-import TrxQueue from '../../components/trxqueue/TrxQueue';
 import './RightPanel.css';
 
-const RightPanel = ({ panelIsVisible, setPanelIsVisible, functionOptions, handleLogout, templateData, talknojutsu }) => {
+const RightPanel = ({ handleCloseDeploy, panelIsVisible, setPanelIsVisible, functionOptions, handleLogout, templateData, talknojutsu }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -35,6 +34,7 @@ const RightPanel = ({ panelIsVisible, setPanelIsVisible, functionOptions, handle
         <div className='main'>
           ACTIVE 
           -- a bunch of jobs here ---
+          <button onClick={handleCloseDeploy}>Close Deployment</button>
         </div>
         <Button
           variant="contained"

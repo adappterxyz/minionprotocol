@@ -1,6 +1,0 @@
-[
-  { "value": "transfer", "label": "Transfer" },
-  { "value": "burn", "label": "Burn" },
-  { "value": "stake", "label": "Stake" },
-  { "value": "TrfrOwnership", "label": "Change Ownership" }
-]

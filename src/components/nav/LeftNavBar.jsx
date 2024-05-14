@@ -25,7 +25,6 @@ const LeftNavBar = ({ handleNavItemClick, activeItem, setActiveItem, isNavVisibl
 
   const navItems = [
     { label: 'Bots', value: 'Bots', icon: ReactIcons.FaDesktop },
-    { label: 'Jobs', value: 'Jobs', icon: ReactIcons.FaCog },
     { label: 'Assets', value: 'Assets', icon: ReactIcons.FaFileContract },
     { label: 'Develop', value: 'Develop', icon: ReactIcons.FaUser },
     

@@ -102,7 +102,7 @@ async function createDeployment(sdl, wallet, client) {
       groups: groups,
       deposit: {
         denom: "uakt",
-        amount: "600000"
+        amount: "500000"
       },
       version: await sdl.manifestVersion(),
       depositor: accounts[0].address
@@ -133,7 +133,7 @@ console.log({
         amount: "75000"
       }
     ],
-    gas: "3000000"
+    gas: "2000000"
   };
 
   const msg = {
@@ -441,8 +441,8 @@ app.get('/deploymanifest', async (req, res) => {
 app.get('/close', async (req, res) => {
   try {
     const { wallet, client, certificate, sdl } = await loadPrerequisites();
-    closeDeployment(wallet, client, deploymentid);
-    res.send('API endpoint');
+    const status = closeDeployment(wallet, client, deploymentid);
+    res.json(status);
   } catch (error) {
     console.error('Error in /close:', error);
     res.status(500).send('Internal Server Error');
