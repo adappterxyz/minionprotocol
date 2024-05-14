@@ -29,6 +29,58 @@ const mnemonic = fs.readFileSync("./fixtures/mnemonic.txt", "utf8").trim();
 const rawSDL = fs.readFileSync("./fixtures/example.sdl.yaml", "utf8");
 const certificatePath = "./fixtures/cert.json";
 
+const fs = require('node:fs');
+const jackal_nodejs_1 = require("@jackallabs/jackal.nodejs");
+const undici_1 = require("undici");
+(0, undici_1.setGlobalDispatcher)(new undici_1.Agent({
+    connect: {
+      timeout: 300000,
+      lookup: (hostname, options, callback) => {
+        require('dns').lookup(hostname, { family: 4, ...options }, callback);
+      }
+    }
+  }));
+//const fileName = process.env.FILE;
+//const sampleDir = process.env.SOURCE;
+const signerChain = 'jackal-1';
+const jklmn = {
+    signerChain,
+    queryAddr: 'https://grpc.jackalprotocol.com',
+    txAddr: 'https://rpc.jackalprotocol.com'
+};
+async function uploadjkl(fileName,sampleDir) {
+  const fileName="1.spec.ts";
+  const mnemonic = process.env.MNEMONIC; // Replace with your mnemonic phrase
+  const m = await jackal_nodejs_1.MnemonicWallet.create(mnemonic);
+  const w = await jackal_nodejs_1.WalletHandler.trackWallet(jklmn, m);
+
+  const fileIo = await w.makeFileIoHandler("1.1.x");
+  if (!fileIo) throw new Error("no FileIo");
+console.log("BEFORE FS");
+const buffer = Buffer.from("This is my data as a string", "utf8");
+console.log("file:",buffer);
+    const toUpload = new File([buffer], fileName, { type: "text/plain" });
+    const dir = await fileIo.downloadFolder("s/" + sampleDir)
+    console.log(dir);
+    const handler = await jackal_nodejs_1.FileUploadHandler.trackFile(toUpload,  dir.getMyPath());
+
+    const uploadList = {};
+    uploadList[fileName] = {
+      data: null,
+      exists: false,
+      handler: handler,
+      key: fileName,
+      uploadable: await handler.getForUpload(),
+    };
+console.log(1);
+    let tracker = { timer: 0, complete: 0 };
+    console.log(2);
+    const status = await fileIo.staggeredUploadFiles(uploadList, dir, tracker);
+    console.log(3);
+
+    console.log("STATUS:",status);
+
+}
 const dseq = 0;
 
 async function loadPrerequisites() {

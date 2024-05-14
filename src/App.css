@@ -375,7 +375,7 @@ cursor: pointer;
   text-align:left;
 }
 .message-text pre{ background: #ccc; padding:4px; }
-
+.message-text pre:hover{ background: #e0ee1e80; padding:4px; }
 .send-message-form {
   display: flex;
   padding: 10px;

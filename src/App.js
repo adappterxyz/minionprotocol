@@ -12,6 +12,7 @@ import Leditor from "./components/leditor/LEditor";
 import { Container, Paper, Typography, TextField, Button, Grid, Box , Card, CardContent} from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import adappter from './init/adappter.json';
 
 const { ethers } = require('ethers');
 
@@ -60,7 +61,7 @@ const [showChat, toggleShowChat] = useState(true);
       {
         body: JSON.stringify(prompt),
         headers: {
-          apiKey: "AIzaSyAWsblnruBZuSzN__qUqh8oK02qgVfj_ew",
+       
           "Content-Type": "application/json"
         },
         method: "POST",
@@ -79,6 +80,19 @@ const [showChat, toggleShowChat] = useState(true);
     .catch(error => {
       console.error('There was a problem with your fetch operation:', error);
     });
+  }
+  const checkforCode=async(html)=>{
+  
+      // Example: Extracting the text within test(...)
+      const regex = /test\((.*?)\);\s*\}\);/s;
+      const match = html.match(regex);
+      if (match) {
+        console.log(match[0]);
+        setScript(match[0]);
+       // return match[1].trim();
+      }
+  
+    console.log(html);
   }
   const AkashRequest = async(bodyObject) =>{
     const url ='https://akashchat.kwang-5a2.workers.dev/'
@@ -99,6 +113,7 @@ const [showChat, toggleShowChat] = useState(true);
 }
      
   }
+  const uploadtojkl = async()=>{}
   const genmsg =(msg) =>{
     return msg.map(message => ({
       role: message.role,
@@ -136,7 +151,7 @@ const [showChat, toggleShowChat] = useState(true);
                 },
                 messages: genmsg([...messages, message]),
                 key: "",
-                prompt: "You are an RPA engineer specialized in nodejs playwright library. A typical output should look like "+example
+                prompt: "You are an RPA engineer specialized in nodejs playwright library. A typical output should look like ("+example+"). you should ommit import statements and return only one recommended bloc of test action for each described step only."
               };
               
               // Using the generic fetch function
@@ -177,27 +192,44 @@ if(typeof localStorage['kvp'] !=='undefined'){  kvp = JSON.parse(localStorage['k
         setValue('');
         localStorage.setItem('kvp', JSON.stringify(newKeyValuePairs)); // Use setItem for better practice
     }
-};
+  };
+  const handleStepUpdate = async()=>{
+    const match = stepscript.match(/test\('([^']+)'/);
 
+if (match && match[1]) {
+    currentStep.title=match[1]; }
+    currentStep.script=stepscript;
+  setCurrentStep(currentStep);//check in steps x and replace with currentstep where key is equal, key as in array position);
+  const updatedSteps = steps.map((step, index) => 
+  index === currentStep.key ? { ...step, script: stepscript } : step
+);
+
+setSteps(updatedSteps);
+
+    //setScript(step.script);
+   // setCurrentStep(step);
+  }
+const handleStepChange = async(step)=>{
+  console.log(step);
+  setScript(step.script);
+  setCurrentStep(step);
+}
 const [currentStep, setCurrentStep] = useState(null);
-const [steps,setSteps] = useState([
-  { id: 1, title: "Login", description: "Log into the application.", type: "Start" },
-  { id: 2, title: "Fetch Data", description: "Retrieve data from the database.", type: "Process" },
-  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
-  { id: 4, title: "Logout", description: "Log out from the application.", type: "End" },
-  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
-  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
-  { id: 3, title: "Log Activity", description: "Log user activity.", type: "Process" },
-  { id: 4, title: "Logout", description: "Log out from the application.", type: "End" },
-]);
+const [stepscript, setScript] = useState("");
+const [steps,setSteps] = useState([]);
 
 const addStep = () => {
   const newId = steps.length + 1; // Simple ID generation
   const newStep = {
       id: newId,
       title: `New Step ${newId}`,
-      description: "Description of new step.",
-      type: "Process"
+      type: "Process",
+      script:`test('has title', async ({ page }) => {
+        await page.goto('https://playwright.dev/');
+      
+        // Expect a title "to contain" a substring.
+        await expect(page).toHaveTitle(/Playwright/);
+      });`
   };
   setSteps([...steps, newStep]);
 };
@@ -311,6 +343,14 @@ const [jobs,setJobs] = useState([   { id: 1, status: "Starting up...", descripti
 };  
 const handleDeploy=async (bot)=>{
  //
+ setIsLoading(true); 
+ const bigIntValue = 10 * 10**5
+ const amount = ethers.parseUnits("1", 18);
+const deduct = await transferChk(adappter.userref,adappter,chain,	"0x99Dc9Ead0c38DB993E33f5BDf7B41A0C68FE7b19", amount);
+setTimeout(() => {
+  getBalance(useradd);
+}, 2000);
+console.log(adappter,chain,useradd); setIsLoading(false);
  console.log(bot);
  bot.id=123;
  const newjob = {id: 10,status: "Job in progress", description: "submit application", type: "End" };
@@ -319,9 +359,6 @@ const handleDeploy=async (bot)=>{
  
  console.log(updatedJobs);
 
-
-
- setIsLoading(true);
  setCurract("Generating deployment message");
  fetch(`${apiUrl}/deploy`, {
   method: 'GET',
@@ -349,6 +386,8 @@ const handleDeploy=async (bot)=>{
       setIsLoading(false);
         console.log("manifest:",data);
    
+  }).catch(err=>{
+    setIsLoading(false);
   })
 
 
@@ -360,6 +399,38 @@ const tokenABI = ["function balanceOf(address owner) view returns (uint256)"];
 const tokenContract = new ethers.Contract(tokenAddress, tokenABI, provider);
 const useradd= '0xA94403f1eE915E1abC0B7A02B706A5826249198c';
 const scan = 'https://testnet.bscscan.com/address/'+useradd;
+const chain ="bsc"; 
+const transferChk = async(userref,operator,chain,address,amount)=>{
+
+  const url = `${operator.endpoint}/sca/${userref}/${chain}/transfer`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${operator.apisecret}`
+    },
+    body: JSON.stringify({
+      "arg": [
+        tokenAddress,
+        address,
+        amount.toString()
+      ]
+    })
+  };
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("Data fetched successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+    return []; // Return an empty array or null to indicate the failure
+  }
+}
 const getBalance = async(address) =>{
   // Query the balance
   const balance = await tokenContract.balanceOf(address);
@@ -500,11 +571,11 @@ const scrollToBottom = () => {
    
         <div className="messages">
           {messages.map((msg) => (
-            <div key={msg.id} className="message">
+            <div key={msg.id} className="message" >
               <div className="message-info">
                 <span>{msg.timestamp}</span>
               </div>
-              <div className={`message-text ${msg.role}`}>
+              <div className={`message-text ${msg.role}`} onClick={(e) => checkforCode(e.target.innerHTML)}>
                 <ReactMarkdown children={msg.text} remarkPlugins={[remarkGfm]} />
               </div>
             </div>
@@ -526,14 +597,14 @@ const scrollToBottom = () => {
             <button onClick={addStep}>Add Step</button>
             <button onClick={deleteCurrentStep}>Delete Current Step</button>
             {/* Button to set current step for demonstration */}
-            {currentStep && <div>{currentStep.title}</div>}
-            <button onClick={() => setCurrentStep({ id: currentStep.id, title: "Updated:)", description: "Data is being processed.", type: "Process" })}>
+            {currentStep && <div>{currentStep.title} </div>}
+            <button onClick={() => handleStepUpdate()}>
                 Update current step
                 
             </button>
             <div>Current step options will be dynamically updated based on the selected step.</div>
-            <button style={{"background":"#333"}}onClick={() => setCurrentStep({ id: 2, title: "Process Data", description: "Data is being processed.", type: "Process" })}>
-                <sup>Deploy to Marketplace via Jackal Storage</sup>
+            <button style={{"background":"#333"}}onClick={() => uploadtojkl()}>
+                <sup>Deploy to Marketplace via <br/>Jackal Storage</sup>
             </button>
           
         </div>
@@ -541,16 +612,15 @@ const scrollToBottom = () => {
  
     
     <div className="code-container">
-      <Leditor/>
+      <Leditor stepscript={stepscript} setScript={setScript}/>
     </div>
   </div>
   <div className='flowchart-container'>
   <div >
             <div className="flowchart-container">
             {steps.map(step => (
-                <div key={step.id} className={`step-block ${step.type.toLowerCase()}`}   onClick={() => setCurrentStep(step)}>
-                    <h4>{step.title}</h4>
-                    <p>{step.description}</p>
+                <div key={step.id} className={`step-block ${step.type.toLowerCase()}`}   onClick={() => handleStepChange(step)}>
+                    <p>{step.title}</p>
                 </div>
             ))}
         </div>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CodeEditor from '@uiw/react-textarea-code-editor';
  
-const LEditor = () => {
+const LEditor = ({stepscript,setScript}) => {
+  console.log(stepscript)
   const [codeSnippet,setCodeSnippet] = useState("");
   const language = "javascript"
   const state = 1;
@@ -16,6 +17,7 @@ const LEditor = () => {
 
 
   const handleCodeSnippetChange = (event) => {
+    setScript(event.target.value);
     setCodeSnippet(event.target.value);
     
   };
@@ -174,6 +176,8 @@ const LEditor = () => {
     const numberOfLines = codeSnippet.split('\n').length;
     const newLineNumbers = Array.from({ length: numberOfLines }, (_, i) => i + 1).join('\n');
     setLineNumbers(newLineNumbers);
+    setCodeSnippet(""+stepscript);
+    console.log(stepscript);
     var usingVersion ='';
     (async () => { 
       //var ver= await loadVersions() 
@@ -181,7 +185,7 @@ const LEditor = () => {
      })();
     
     
-  }, [codeSnippet]);
+  }, [codeSnippet,stepscript]);
 
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start' , flexGrow: 1}}>
