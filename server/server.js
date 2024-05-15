@@ -1,5 +1,6 @@
 const fs = require("fs");
 const https = require("https");
+const http = require('http');
 
 const { SigningStargateClient } = require("@cosmjs/stargate");
 const { DirectSecp256k1HdWallet, Registry } = require("cosmwasm");
@@ -29,7 +30,6 @@ const mnemonic = fs.readFileSync("./fixtures/mnemonic.txt", "utf8").trim();
 const rawSDL = fs.readFileSync("./fixtures/example.sdl.yaml", "utf8");
 const certificatePath = "./fixtures/cert.json";
 
-const fs = require('node:fs');
 const jackal_nodejs_1 = require("@jackallabs/jackal.nodejs");
 const undici_1 = require("undici");
 (0, undici_1.setGlobalDispatcher)(new undici_1.Agent({
@@ -49,7 +49,7 @@ const jklmn = {
     txAddr: 'https://rpc.jackalprotocol.com'
 };
 async function uploadjkl(fileName,sampleDir) {
-  const fileName="1.spec.ts";
+  //const fileName="1.spec.ts";
   const mnemonic = process.env.MNEMONIC; // Replace with your mnemonic phrase
   const m = await jackal_nodejs_1.MnemonicWallet.create(mnemonic);
   const w = await jackal_nodejs_1.WalletHandler.trackWallet(jklmn, m);
@@ -185,7 +185,7 @@ console.log({
         amount: "75000"
       }
     ],
-    gas: "2000000"
+    gas: "1000000" //134623
   };
 
   const msg = {
@@ -453,10 +453,22 @@ async function closeDeployment(wallet, client , depblockheight) {
 
 
 const express = require('express');
+
 const path = require('path');
+const cors = require('cors');
 const app = express();
+const server = http.createServer(app);
+server.setTimeout(300000);
+const corsOptions = {
+  origin: 'https://app.minionprotocol.com', // Allow only this origin
+  methods: ['GET', 'POST'], // Allow only these methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow only these headers
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+};
+
 
 // Serve the static files from the React app
+app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../build')));
 
 // An API endpoint
@@ -468,7 +480,7 @@ app.get('/deploy', async (req, res) => {
     const deployment = await createDeployment(sdl, wallet, client);
     console.log("Creating lease...");
     const lease = await createLease(deployment, wallet, client);
-   
+   console.log(lease);
     res.json(lease);
   } catch (error) {
     console.error('Error in /deploy:', error);
@@ -476,15 +488,17 @@ app.get('/deploy', async (req, res) => {
   }
 });
 app.get('/deploymanifest', async (req, res) => {
+
   try {
-    const id = req.params.lease;
-    const lease = {};
-    lease.id = JSON.parse(id);
-    console.log(lease);
+    
+    const lease = JSON.parse(req.query.lease);
+    
+
+//    lease= JSON.parse(id);
     const { wallet, client, certificate, sdl } = await loadPrerequisites();
  
     const ret = await sendManifest(sdl, lease, wallet, certificate);
-    res.send('Deployed: ' + ret);
+    res.json({url:ret});
   } catch (error) {
     console.error('Error in /deploy-manifest:', error);
     res.status(500).send('Deployment failed: ' + error.message);
@@ -493,7 +507,9 @@ app.get('/deploymanifest', async (req, res) => {
 app.get('/close', async (req, res) => {
   try {
     const { wallet, client, certificate, sdl } = await loadPrerequisites();
-    const status = closeDeployment(wallet, client, deploymentid);
+    const height = req.query.height;
+  
+    const status = closeDeployment(wallet, client, height);
     res.json(status);
   } catch (error) {
     console.error('Error in /close:', error);

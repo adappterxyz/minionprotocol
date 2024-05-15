@@ -241,11 +241,9 @@ const deleteCurrentStep = () => {
 };
 
 
-const [jobs,setJobs] = useState([   { id: 1, status: "Starting up...", description: "crawl data from ...", link: "Process" },
-{ id: 2,status: "Job in progress", description: "submit application", type: "End" },
-{ id: 2,status: "Job completed", description: "escrow account information", type: "End" }]);
+const [jobs,setJobs] = useState([]);
 
-  const apiUrl = '//localhost:3000';
+  const apiUrl = '';
 
 
   const handleNavItemClick = (item) => {
@@ -347,18 +345,11 @@ const handleDeploy=async (bot)=>{
  const bigIntValue = 10 * 10**5
  const amount = ethers.parseUnits("1", 18);
 const deduct = await transferChk(adappter.userref,adappter,chain,	"0x99Dc9Ead0c38DB993E33f5BDf7B41A0C68FE7b19", amount);
-setTimeout(() => {
-  getBalance(useradd);
-}, 2000);
-console.log(adappter,chain,useradd); setIsLoading(false);
- console.log(bot);
- bot.id=123;
- const newjob = {id: 10,status: "Job in progress", description: "submit application", type: "End" };
- const updatedJobs = handleUpdateOrAddJob(jobs, newjob);
- setJobs(updatedJobs);
- 
- console.log(updatedJobs);
 
+console.log(adappter,chain,useradd); //setIsLoading(false);
+
+// console.log(updatedJobs);
+var blockheight =0;
  setCurract("Generating deployment message");
  fetch(`${apiUrl}/deploy`, {
   method: 'GET',
@@ -367,12 +358,18 @@ console.log(adappter,chain,useradd); setIsLoading(false);
     'Authorization': `Bearer ${localStorage.login}`
   }
 }).then(response => {
+  setTimeout(() => {
+    getBalance(useradd);
+  }, 2000);
   setCurract("Deploying image...");
   return response.json();
 }).then(data => {
   setCurract("Lease ID obtained");
+  
+ blockheight = data.id.dseq; 
+ 
     console.log("leaseid:",data);
-    fetch(`${apiUrl}/deploymanifest?=${encodeURIComponent(data)}`, {
+    fetch(`${apiUrl}/deploymanifest?lease=${encodeURIComponent(JSON.stringify(data))}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -383,6 +380,9 @@ console.log(adappter,chain,useradd); setIsLoading(false);
       return response.json();
     }).then(data => {
       setCurract("Manifests successfully returned.");
+      const newjob = {id: jobs.length+1 ,status: "Job in progress", description: "submit application", type: "End" , height: blockheight , url: data.url };
+      const updatedJobs = handleUpdateOrAddJob(jobs, newjob);
+      setJobs(updatedJobs);
       setIsLoading(false);
         console.log("manifest:",data);
    
@@ -437,11 +437,12 @@ const getBalance = async(address) =>{
   setBalance(parseFloat(ethers.formatUnits(balance, 18)).toFixed(2));
 }
 
-const handleCloseDeploy=async(id)=>{
-  console.log(id); return false;
+const handleCloseDeploy=async(job)=>{
+  setJobs(prevMembers => prevMembers.filter(member => member.id !== job.id));
+  const height=job.height;
   setIsLoading(true);
   setCurract("Closing Deployment...");
- fetch(`${apiUrl}/close`, {
+ fetch(`${apiUrl}/close?height=${height}`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -602,7 +603,7 @@ const scrollToBottom = () => {
                 Update current step
                 
             </button>
-            <div>Current step options will be dynamically updated based on the selected step.</div>
+            <div> </div>
             <button style={{"background":"#333"}}onClick={() => uploadtojkl()}>
                 <sup>Deploy to Marketplace via <br/>Jackal Storage</sup>
             </button>

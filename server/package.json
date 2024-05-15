@@ -24,6 +24,7 @@
         "@uiw/react-textarea-code-editor": "^3.0.2",
         "aria-query": "^5.2.1",
         "axios": "^1.6.5",
+        "cors": "^2.8.5",
         "deep-equal": "^2.2.1",
         "dotenv": "^16.4.5",
         "eslint-plugin-jsx-a11y": "^6.7.1",

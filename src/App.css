@@ -374,7 +374,7 @@ cursor: pointer;
   margin-top: 5px;
   text-align:left;
 }
-.message-text pre{ background: #ccc; padding:4px; }
+.message-text pre{ background: #ccc; padding:4px; max-width:100%; }
 .message-text pre:hover{ background: #e0ee1e80; padding:4px; }
 .send-message-form {
   display: flex;
@@ -406,7 +406,7 @@ cursor: pointer;
 .flowchart-container {
   display: flex;
 /*  flex-wrap: wrap; */
-  overflow-x: scroll;
+  overflow-x: auto;
   gap: 10px;
   background-color: #f4f4f4; /* Light grey background */
 }

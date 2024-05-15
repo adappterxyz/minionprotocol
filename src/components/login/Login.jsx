@@ -10,8 +10,8 @@ import { Container, Paper, Typography, TextField, Button, Grid, Box } from '@mui
 import './Login.css';
 
   const Login = ({ onLogin }) => {
-    const [username, setUsername] = useState('banana');
-  const [password, setPassword] = useState('banana');
+    const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const handleLogin = (e) => {
     e.preventDefault();
     // Handle login logic here
