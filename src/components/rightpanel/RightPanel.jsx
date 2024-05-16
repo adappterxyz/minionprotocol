@@ -33,12 +33,12 @@ const RightPanel = ({ jobs, updateJobs,handleCloseDeploy, panelIsVisible, setPan
       >
 
           <div className='main'>
-            <h4>Jobs</h4>
+            <h3>Current Deployments</h3>
             {jobs.map((job) => (
                 <div key={job.id} className="job">
                     <div className="status">{job.status}</div>
                     <div className="description">{job.description}</div>
-                <div className="link"><a href={"http://"+job.url} target="_blank">{job.url}</a></div>
+                <div className="link"><a href={"http://"+job.url}>{job.url}</a></div>
                     <button onClick={()=>handleCloseDeploy(job)}>Close Deployment</button>
                 </div>
             ))}
