@@ -81,6 +81,12 @@ const [showChat, toggleShowChat] = useState(true);
       console.error('There was a problem with your fetch operation:', error);
     });
   }
+  function decodeHTMLEntities(text) {
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = text;
+    return textArea.value;
+  }
+  
   const checkforCode=async(html)=>{
   
       // Example: Extracting the text within test(...)
@@ -88,7 +94,7 @@ const [showChat, toggleShowChat] = useState(true);
       const match = html.match(regex);
       if (match) {
         console.log(match[0]);
-        setScript(match[0]);
+        setScript( decodeHTMLEntities(match[0]));
        // return match[1].trim();
       }
   
@@ -151,7 +157,7 @@ const [showChat, toggleShowChat] = useState(true);
                 },
                 messages: genmsg([...messages, message]),
                 key: "",
-                prompt: "You are an RPA engineer specialized in nodejs playwright library. A typical output should look like ("+example+"). you should ommit import statements and return only one recommended bloc of test action for each described step only."
+                prompt: "You are an RPA engineer specialized in nodejs playwright library. A typical output should look like ("+example+"). you should ommit import statements and return only one recommended bloc of test action for each described step only. test action step should all start with 'test('  and ends with  '})'. all code blocks should come with markdown. there should be comments after each tests code recommended.;"
               };
               
               // Using the generic fetch function
