@@ -119,7 +119,30 @@ const [showChat, toggleShowChat] = useState(true);
 }
      
   }
-  const uploadtojkl = async()=>{}
+  const uploadtojkl = async()=>{
+    const scripts = steps.filter(member => member.scripts) // Filter out objects without 'scripts'
+    .map(member => member.scripts)    // Map to 'scripts' values
+    .join(' ');              
+fetch(`${apiUrl}/upload?filename=${"1.js"}&dir=${"/"}&script=${encodeURIComponent(scripts)}`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.login}`
+  }
+})  .then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok ' + response.statusText);
+  }
+  return response.json();
+})
+.then(data => {
+  console.log('Success:', data);
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+
+  }
   const genmsg =(msg) =>{
     return msg.map(message => ({
       role: message.role,

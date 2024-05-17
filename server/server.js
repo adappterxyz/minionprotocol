@@ -40,24 +40,21 @@ const undici_1 = require("undici");
       }
     }
   }));
-//const fileName = process.env.FILE;
-//const sampleDir = process.env.SOURCE;
 const signerChain = 'jackal-1';
 const jklmn = {
     signerChain,
     queryAddr: 'https://grpc.jackalprotocol.com',
     txAddr: 'https://rpc.jackalprotocol.com'
 };
-async function uploadjkl(fileName,sampleDir) {
+async function uploadjkl(fileName,sampleDir,script) {
   //const fileName="1.spec.ts";
-  const mnemonic = process.env.MNEMONIC; // Replace with your mnemonic phrase
   const m = await jackal_nodejs_1.MnemonicWallet.create(mnemonic);
   const w = await jackal_nodejs_1.WalletHandler.trackWallet(jklmn, m);
 
   const fileIo = await w.makeFileIoHandler("1.1.x");
   if (!fileIo) throw new Error("no FileIo");
 console.log("BEFORE FS");
-const buffer = Buffer.from("This is my data as a string", "utf8");
+const buffer = Buffer.from(script, "utf8");
 console.log("file:",buffer);
     const toUpload = new File([buffer], fileName, { type: "text/plain" });
     const dir = await fileIo.downloadFolder("s/" + sampleDir)
@@ -516,10 +513,18 @@ app.get('/close', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-app.get('/generate', async (req, res) => {
-  //sen  
-  res.send('API endpoint');
+app.get('/upload', async (req, res) => {
+  try {
+    const fileName = req.query.filename;
+    const dir = req.query.dir;
+    const script = req.query.script;
+    uploadjkl(fileName,dir,script)
+   console.log(lease);
+    res.json(lease);
+  } catch (error) {
+    console.error('Error in /deploy:', error);
+    res.status(500).send('Deployment failed: ' + error.message);
+  }
 });
 
 // Handles any requests that don't match the ones above
