@@ -19,8 +19,8 @@ const { ethers } = require('ethers');
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(0);
-  const [activeItem, setActiveItem] = useState('Bots');
+  const [isLoggedIn, setIsLoggedIn] = useState(1);
+  const [activeItem, setActiveItem] = useState('Tasks');
   const [curract, setCurract] = useState('...');
   const [initialProjects, setInitialProjects] = useState(initialProjectsdata);
   const [isLoading, setIsLoading] = useState(false);
@@ -533,7 +533,7 @@ const scrollToBottom = () => {
             <div className={`${panelIsVisible ? 'reduced' : 'fullview'} ${isNavVisible ? 'shownav' : 'hidenav'}`} >
 
 
-              {activeItem === 'Bots' && <div>
+              {activeItem === 'Tasks' && <div>
               <div className="balance-display">
   <img src="chicken.png" alt="Chicken Icon"/>
   <a href={scan} target="_blank" >Balance: {balance} CKN </a>

@@ -24,8 +24,9 @@ const LeftNavBar = ({ handleNavItemClick, activeItem, setActiveItem, isNavVisibl
   };
 
   const navItems = [
-    { label: 'Bots', value: 'Bots', icon: ReactIcons.FaDesktop },
+    { label: 'Tasks', value: 'Tasks', icon: ReactIcons.FaDesktop },
     { label: 'Assets', value: 'Assets', icon: ReactIcons.FaFileContract },
+    { label: 'Schedule', value: 'Scheduled', icon: ReactIcons.FaCalendar },
     { label: 'Develop', value: 'Develop', icon: ReactIcons.FaUser },
     
     
