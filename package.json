@@ -52,7 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.48.2",
     "@types/node": "^20.3.1",
     "css-loader": "^7.1.1",
     "file-loader": "^6.2.0",
